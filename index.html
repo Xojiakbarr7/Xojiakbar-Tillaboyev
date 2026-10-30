@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tillaboyev Xojiakbar — Dasturchi, AI Ekspert & Sotuv Rahbari (ROP)</title>
+    <meta name="description" content="Tillaboyev Xojiakbar — frontend, Flutter, Python botlar, sun'iy intellekt va sotuv boshqaruvi bo'yicha shaxsiy portfolio.">
+    <meta name="theme-color" content="#040710">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D Graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* =========================================================
+           COHESIVE LUXURY COLOR SYSTEM (CSS VARIABLES)
+           Default Theme: "Royal Cyber" (Matched to Xojiakbar's Neon Blue Photo)
+        ========================================================= */
+        :root {
+            --bg-base: #040710;
+            --bg-surface: #0A1020;
+            --bg-card: rgba(10, 17, 34, 0.78);
+            --accent-primary: #00D2FF;     /* Neon Studio Blue matching photo ring */
+            --accent-secondary: #3B82F6;   /* Electric Sapphire */
+            --accent-vip: #F59E0B;         /* Champagne Gold for ROP/VIP */
+            --border-subtle: rgba(0, 210, 255, 0.18);
+            --border-hover: rgba(0, 210, 255, 0.62);
+            --glow-primary: rgba(0, 210, 255, 0.26);
+            --glow-secondary: rgba(59, 130, 246, 0.26);
+        }
+
+        /* Theme 2: "Emerald Executive" (Deep Obsidian + Emerald & Teal) */
+        [data-theme="emerald"] {
+            --bg-base: #050A09;
+            --bg-surface: #0A1412;
+            --bg-card: rgba(12, 24, 21, 0.75);
+            --accent-primary: #10B981;
+            --accent-secondary: #14B8A6;
+            --accent-vip: #F59E0B;
+            --border-subtle: rgba(16, 185, 129, 0.15);
+            --border-hover: rgba(16, 185, 129, 0.5);
+            --glow-primary: rgba(16, 185, 129, 0.22);
+            --glow-secondary: rgba(20, 184, 166, 0.22);
+        }
+
+        /* Theme 3: "Luxury Gold" (Onyx Black + Champagne Gold & Warm Amber) */
+        [data-theme="gold"] {
+            --bg-base: #080706;
+            --bg-surface: #12100E;
+            --bg-card: rgba(24, 20, 16, 0.76);
+            --accent-primary: #F59E0B;
+            --accent-secondary: #D97706;
+            --accent-vip: #38BDF8;
+            --border-subtle: rgba(245, 158, 11, 0.16);
+            --border-hover: rgba(245, 158, 11, 0.52);
+            --glow-primary: rgba(245, 158, 11, 0.22);
+            --glow-secondary: rgba(217, 119, 6, 0.22);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: #F8FAFC;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        /* 3D Canvas Container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Subtle Architectural Grid Overlay */
+        .luxury-grid {
+            background-size: 56px 56px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        /* Cohesive Glassmorphism Card with Mouse Spotlight */
+        .luxury-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .luxury-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                var(--glow-primary),
+                transparent 45%
+            );
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .luxury-card:hover::before {
+            opacity: 0.45;
+        }
+
+        .luxury-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 16px 48px -12px var(--glow-primary), 0 0 24px -6px var(--glow-secondary);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 3D Perspective Tilt Wrapper */
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        /* Unified Gradient Text */
+        .theme-gradient-text {
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--accent-primary) 55%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Unified Primary Button */
+        .btn-primary-luxury {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: #050811;
+            font-weight: 700;
+            box-shadow: 0 10px 28px -6px var(--glow-primary);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-luxury:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px -4px var(--border-hover);
+            filter: brightness(1.08);
+        }
+
+        /* Accent Dynamic Classes */
+        .text-theme-primary { color: var(--accent-primary); }
+        .bg-theme-subtle { background-color: var(--glow-primary); }
+        .border-theme { border-color: var(--border-subtle); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 4px;
+        }
+
+        /* Range Input Styling */
+        input[type="range"] {
+            accent-color: var(--accent-primary);
+        }
+
+        /* =========================================================
+           MULTI-PAGE (SPA) TRANSITION & ROUTER STYLES
+        ========================================================= */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(18px) scale(0.985);
+            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page-view.active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Active Navbar Tab Indicator */
+        .nav-page-btn {
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .nav-page-btn.active-nav {
+            color: #FFFFFF;
+            background: var(--glow-primary);
+            border: 1px solid var(--border-hover);
+            box-shadow: 0 6px 20px -4px var(--glow-primary);
+        }
+
+        /* Top Warp Transition Bar */
+        #page-transition-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            z-index: 9999;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-vip));
+            box-shadow: 0 0 18px var(--accent-primary);
+            transition: width 0.35s ease, opacity 0.35s ease;
+            opacity: 0;
+        }
+
+        /* =========================================================
+           3D NEON STUDIO PHOTO MONTAGE ENGINE STYLES
+        ========================================================= */
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes spinReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-7px); }
+        }
+        @keyframes scanlineMove {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .montage-orbit-outer {
+            animation: spinSlow 22s linear infinite;
+        }
+        .montage-orbit-inner {
+            animation: spinReverse 15s linear infinite;
+        }
+        .float-badge-1 { animation: floatBadge 4s ease-in-out infinite; }
+        .float-badge-2 { animation: floatBadge 4.6s ease-in-out infinite 0.8s; }
+        .float-badge-3 { animation: floatBadge 5.2s ease-in-out infinite 1.5s; }
+
+        .photo-neon-ring {
+            box-shadow:
+                0 0 35px rgba(0, 210, 255, 0.55),
+                0 0 75px rgba(59, 130, 246, 0.35),
+                inset 0 0 28px rgba(0, 210, 255, 0.45);
+            border: 3px solid var(--accent-primary);
+        }
+
+        /* Photo Montage Filter Modes */
+        .montage-fx-original {
+            filter: contrast(1.06) saturate(1.12) brightness(1.02);
+        }
+        .montage-fx-hologram {
+            filter: contrast(1.22) saturate(1.35) hue-rotate(-8deg) drop-shadow(0 0 16px #00D2FF);
+        }
+        .montage-fx-cyber {
+            filter: contrast(1.28) brightness(1.05) saturate(1.4);
+        }
+        .montage-fx-gold {
+            filter: contrast(1.12) sepia(0.28) saturate(1.5) brightness(1.05);
+        }
+
+        .scanline-overlay {
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 210, 255, 0.18) 50%,
+                transparent 100%
+            );
+            height: 40%;
+            width: 100%;
+            animation: scanlineMove 3.2s linear infinite;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="luxury-grid antialiased selection:bg-sky-400 selection:text-slate-950 min-h-screen flex flex-col justify-between" data-theme="royal">
+
+    <!-- Top Animated Page Transition Progress Bar -->
+    <div id="page-transition-bar"></div>
+
+    <!-- Hidden Global File Input for Instant HD Photo Sync (if browser sandbox blocks local file) -->
+    <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleUserPhotoUpload(event)">
+
+    <!-- 3D Three.js Background Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- Copy Toast Notification -->
+    <div id="toast-notification" class="fixed top-24 right-6 z-50 hidden items-center gap-3 luxury-card px-5 py-3.5 rounded-2xl border border-sky-400/50 shadow-2xl">
+        <div class="w-8 h-8 rounded-xl bg-theme-subtle flex items-center justify-center text-theme-primary">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <div class="text-xs font-bold text-white" id="toast-title">Nusxa olindi!</div>
+            <div class="text-[11px] text-slate-300" id="toast-desc">+998 91 879 20 05 xotiraga saqlandi</div>
+        </div>
+    </div>
+
+    <!-- Bottom Right Floating 3D Geometry Controller -->
+    <div class="fixed bottom-5 right-5 z-40 flex items-center gap-1.5 luxury-card px-3.5 py-2 rounded-full">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-1"></span>
+        <span class="text-[11px] font-semibold text-slate-300 hidden sm:inline mr-1">3D Shakl:</span>
+        <button onclick="switch3DMode('core')" id="mode-core" class="px-3 py-1 rounded-full text-xs font-semibold btn-primary-luxury">
+            Kiber Yadro
+        </button>
+        <button onclick="switch3DMode('nexus')" id="mode-nexus" class="px-3 py-1 rounded-full text-xs font-medium text-slate-300 hover:text-white transition">
+            Orbital Nexus
+        </button>
+        <button onclick="switch3DMode('helix')" id="mode-helix" class="px-3 py-1 rounded-full text-xs font-medium text-slate-300 hover:text-white transition">
+            Kvant To'lqini
+        </button>
+    </div>
+
+    <!-- NAVIGATION BAR (MULTI-PAGE ROUTER) -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            <!-- Brand Identity with Mounted Mini Avatar -->
+            <button onclick="navigateToPage('home')" class="flex items-center gap-3 group shrink-0 text-left">
+                <div class="relative w-11 h-11 rounded-full p-0.5 bg-gradient-to-tr from-sky-400 via-blue-500 to-indigo-600 shadow-lg shadow-sky-500/30">
+                    <img src="image_23b677.jpg" onerror="handleImageFallback(this)" alt="Tillaboyev Xojiakbar" class="user-portrait-img w-full h-full object-cover rounded-full bg-slate-950">
+                    <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-slate-950"></span>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-base sm:text-lg tracking-tight text-white block leading-none">
+                        XOJIAKBAR
+                    </span>
+                    <span class="text-[11px] text-theme-primary tracking-wider uppercase font-semibold">
+                        21 Yosh • IT • AI • ROP
+                    </span>
+                </div>
+            </button>
+
+            <!-- Desktop Multi-Page Navigation Buttons -->
+            <nav class="hidden xl:flex items-center gap-1.5 bg-slate-900/70 p-1.5 rounded-2xl border border-white/10">
+                <button onclick="navigateToPage('home')" id="nav-home" class="nav-page-btn active-nav px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-house text-[11px]"></i> Asosiy
+                </button>
+                <button onclick="navigateToPage('about')" id="nav-about" class="nav-page-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-astronaut text-[11px]"></i> Men haqimda
+                </button>
+                <button onclick="navigateToPage('skills')" id="nav-skills" class="nav-page-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-code text-[11px]"></i> Ko'nikmalar
+                </button>
+                <button onclick="navigateToPage('rop')" id="nav-rop" class="nav-page-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-crown text-amber-400 text-[11px]"></i> Sotuv & ROP
+                </button>
+                <button onclick="navigateToPage('projects')" id="nav-projects" class="nav-page-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-cubes text-[11px]"></i> Loyihalar
+                </button>
+                <button onclick="navigateToPage('contact')" id="nav-contact" class="nav-page-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5">
+                    <i class="fa-solid fa-paper-plane text-[11px]"></i> Aloqa
+                </button>
+            </nav>
+
+            <!-- Live Cohesive Theme Switcher & Mobile Menu Trigger -->
+            <div class="flex items-center gap-2.5">
+                <!-- Harmonious Palette Selector -->
+                <div class="flex items-center gap-1.5 bg-slate-900/90 border border-white/10 px-2.5 py-1.5 rounded-xl" title="Ranglar uyg'unligini tanlash">
+                    <span class="text-[11px] text-slate-400 hidden sm:inline mr-1">Mavzu:</span>
+                    <button onclick="setLuxuryTheme('royal')" id="theme-btn-royal" class="w-5 h-5 rounded-full bg-gradient-to-tr from-indigo-500 to-sky-400 ring-2 ring-white scale-110 transition" title="Royal Cyber (Moviy & Indigo)"></button>
+                    <button onclick="setLuxuryTheme('emerald')" id="theme-btn-emerald" class="w-5 h-5 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 opacity-70 hover:opacity-100 transition" title="Emerald Executive (Zumrad)"></button>
+                    <button onclick="setLuxuryTheme('gold')" id="theme-btn-gold" class="w-5 h-5 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 opacity-70 hover:opacity-100 transition" title="Luxury Gold (Oltin)"></button>
+                </div>
+
+                <a href="https://t.me/the_tillaboyev" target="_blank" rel="noopener noreferrer" class="btn-primary-luxury px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center gap-2">
+                    <i class="fa-brands fa-telegram text-base"></i>
+                    <span class="hidden sm:inline">@the_tillaboyev</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile & Tablet Sub-Navigation Bar (Always accessible on smaller screens) -->
+        <div class="xl:hidden border-t border-white/10 bg-slate-950/95 px-3 py-2 overflow-x-auto">
+            <div class="flex items-center gap-1.5 min-w-max">
+                <button onclick="navigateToPage('home')" id="mnav-home" class="nav-page-btn active-nav px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300">
+                    Asosiy
+                </button>
+                <button onclick="navigateToPage('about')" id="mnav-about" class="nav-page-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300">
+                    Men haqimda
+                </button>
+                <button onclick="navigateToPage('skills')" id="mnav-skills" class="nav-page-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300">
+                    Ko'nikmalar
+                </button>
+                <button onclick="navigateToPage('rop')" id="mnav-rop" class="nav-page-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300">
+                    Sotuv & ROP
+                </button>
+                <button onclick="navigateToPage('projects')" id="mnav-projects" class="nav-page-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300">
+                    Loyihalar
+                </button>
+                <button onclick="navigateToPage('contact')" id="mnav-contact" class="nav-page-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300">
+                    Aloqa
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         MULTI-PAGE CONTAINER (EACH SECTION IS AN ISOLATED PAGE)
+    ========================================================= -->
+    <main class="relative z-10 pt-32 xl:pt-24 pb-16 flex-grow flex items-center">
+        <div class="w-full">
+
+            <!-- ==========================================
+                 PAGE 1: ASOSIY (HOME PAGE)
+            =========================================== -->
+            <section id="page-home" class="page-view active-page py-6 lg:py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                        
+                        <!-- Left Column: Executive Introduction -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <div class="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-full luxury-card">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span class="text-xs sm:text-sm font-semibold text-white">Tillaboyev Xojiakbar • 21 yosh</span>
+                                <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/20 border border-sky-400/40 text-sky-300 font-bold">
+                                    &lt;/&gt; CODE • BUILD • IMPROVE • REPEAT
+                                </span>
+                            </div>
+
+                            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12] text-white">
+                                Zamonaviy <span class="theme-gradient-text">Dasturchi</span>, AI Ekspert va <span class="theme-gradient-text">Sotuv Rahbari (ROP)</span>
+                            </h1>
+
+                            <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl">
+                                Men <strong class="text-white">Tillaboyev Xojiakbar (21 yosh)</strong> — <span class="text-theme-primary font-semibold">Frontend, Flutter va Python Bot</span> dasturchisiman. Shu bilan birga <span class="text-amber-400 font-semibold">1.5 yillik Sotuv bo'limi rahbari (ROP)</span> tajribam, <span class="text-theme-primary font-semibold">100% Sun'iy Intellekt</span> hamda <strong class="text-white">Word/Excel va Ingliz tili (B1)</strong> bilimlarim bilan biznesingizni yangi bosqichga olib chiqaman.
+                            </p>
+
+                            <!-- Multi-Page Quick Portal Cards -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+                                <button onclick="navigateToPage('about')" class="luxury-card p-3.5 rounded-2xl text-left group">
+                                    <div class="flex items-center justify-between text-theme-primary mb-1">
+                                        <i class="fa-solid fa-user-astronaut"></i>
+                                        <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition"></i>
+                                    </div>
+                                    <div class="font-display font-bold text-sm text-white">Men haqimda</div>
+                                    <div class="text-[11px] text-slate-400">21 yosh • Shaxsiy Dosye</div>
+                                </button>
+
+                                <button onclick="navigateToPage('skills')" class="luxury-card p-3.5 rounded-2xl text-left group">
+                                    <div class="flex items-center justify-between text-theme-primary mb-1">
+                                        <i class="fa-solid fa-code"></i>
+                                        <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition"></i>
+                                    </div>
+                                    <div class="font-display font-bold text-sm text-white">Ko'nikmalar</div>
+                                    <div class="text-[11px] text-slate-400">Web, Flutter, Bot, AI</div>
+                                </button>
+
+                                <button onclick="navigateToPage('rop')" class="luxury-card p-3.5 rounded-2xl text-left group">
+                                    <div class="flex items-center justify-between text-amber-400 mb-1">
+                                        <i class="fa-solid fa-crown"></i>
+                                        <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition"></i>
+                                    </div>
+                                    <div class="font-display font-bold text-sm text-white">Sotuv & ROP</div>
+                                    <div class="text-[11px] text-slate-400">1.5 yil tajriba & ROI</div>
+                                </button>
+
+                                <button onclick="navigateToPage('projects')" class="luxury-card p-3.5 rounded-2xl text-left group">
+                                    <div class="flex items-center justify-between text-theme-primary mb-1">
+                                        <i class="fa-solid fa-cubes"></i>
+                                        <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition"></i>
+                                    </div>
+                                    <div class="font-display font-bold text-sm text-white">Loyihalar</div>
+                                    <div class="text-[11px] text-slate-400">Ishlarim vitrinasi</div>
+                                </button>
+
+                                <button onclick="navigateToPage('contact')" class="luxury-card p-3.5 rounded-2xl text-left group col-span-2 sm:col-span-2">
+                                    <div class="flex items-center justify-between text-emerald-400 mb-1">
+                                        <span class="text-xs font-bold uppercase tracking-wider">To'g'ridan-to'g'ri Aloqa</span>
+                                        <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition"></i>
+                                    </div>
+                                    <div class="font-display font-bold text-sm text-white">+998 91 879 20 05 • @the_tillaboyev</div>
+                                    <div class="text-[11px] text-slate-400">Instagram: @xojiakbarr.7</div>
+                                </button>
+                            </div>
+
+                            <!-- Primary Action Buttons -->
+                            <div class="flex flex-wrap items-center gap-4 pt-2">
+                                <button onclick="navigateToPage('about')" class="btn-primary-luxury px-7 py-4 rounded-2xl text-sm sm:text-base flex items-center gap-2.5">
+                                    <span>Men haqimda sahifasiga o'tish</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                                <button onclick="navigateToPage('projects')" class="luxury-card px-6 py-4 rounded-2xl text-white hover:text-theme-primary font-semibold text-sm sm:text-base flex items-center gap-2.5">
+                                    <i class="fa-solid fa-cube text-theme-primary"></i>
+                                    <span>Loyihalarni ko'rish</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: 3D NEON PHOTO PORTAL -->
+                        <div class="lg:col-span-5 flex justify-center">
+                            <div class="tilt-card luxury-card rounded-3xl p-6 sm:p-7 w-full max-w-md relative">
+                                <div class="card-content flex flex-col items-center">
+                                    
+                                    <!-- Top Personal Header Tag (Removed XOJIAKBAR_STUDIO_3D) -->
+                                    <div class="w-full flex items-center justify-between text-xs mb-4 pb-3 border-b border-white/10">
+                                        <span class="font-display text-white font-bold flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span> Tillaboyev Xojiakbar
+                                        </span>
+                                        <button onclick="document.getElementById('fileInput').click()" class="px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/30 text-sky-300 hover:text-white text-[11px] font-semibold transition flex items-center gap-1.5" title="Rasm ko'rinmasa ustiga bosing">
+                                            <i class="fa-solid fa-camera"></i> Rasmni yuklash
+                                        </button>
+                                    </div>
+
+                                    <!-- 3D Circular Neon Portrait Stage (Directly Clickable) -->
+                                    <div id="photo-drop-zone" onclick="document.getElementById('fileInput').click()" title="Rasmingizni tanlash uchun doira ustiga bosing" class="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center my-2 cursor-pointer">
+                                        <!-- Outer Rotating Cyber Dashed Orbit -->
+                                        <div class="pricing-orbit montage-orbit-outer absolute inset-0 rounded-full border-2 border-dashed border-sky-400/45 pointer-events-none"></div>
+                                        <!-- Inner Counter-Rotating Neon Tech Ring -->
+                                        <div class="montage-orbit-inner absolute inset-3 rounded-full border border-indigo-400/40 pointer-events-none" style="box-shadow: 0 0 40px rgba(0, 210, 255, 0.25);"></div>
+
+                                        <!-- Main Glowing Circular Frame with Real Photo -->
+                                        <div class="relative w-52 h-52 sm:w-60 sm:h-60 rounded-full overflow-hidden photo-neon-ring bg-slate-950 group flex items-center justify-center">
+                                            <img id="hero-portrait-img" src="image_23b677.jpg" onerror="handleImageFallback(this)" alt="Tillaboyev Xojiakbar" class="user-portrait-img w-full h-full object-cover object-center montage-fx-original transition-all duration-500 group-hover:scale-105">
+                                            
+                                            <!-- Animated Hologram Scanline Overlay -->
+                                            <div id="hero-scanline" class="scanline-overlay absolute inset-0 opacity-20"></div>
+
+                                            <!-- Subtle Hover Prompt to Pick File if Blocked by Sandbox -->
+                                            <div class="photo-upload-hint absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4 text-center">
+                                                <i class="fa-solid fa-camera text-2xl text-sky-400 mb-1.5"></i>
+                                                <span class="text-xs font-bold text-white">Rasmni ochish uchun bosing</span>
+                                                <span class="text-[10px] text-slate-300 mt-0.5">image_23b677.jpg</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Floating 3D Badge 1: Top-Left (CODE BUILD IMPROVE) -->
+                                        <div class="float-badge-1 absolute -top-2 -left-2 sm:-left-4 px-3 py-1.5 rounded-2xl bg-slate-950/90 border border-sky-400/50 shadow-xl backdrop-blur-md">
+                                            <div class="text-[10px] font-mono text-sky-400 font-bold leading-tight">CODE • BUILD</div>
+                                            <div class="text-[9px] font-mono text-slate-300 leading-tight">IMPROVE • REPEAT</div>
+                                        </div>
+
+                                        <!-- Floating 3D Badge 2: Top-Right (1.5 Yr ROP) -->
+                                        <div class="float-badge-2 absolute -top-1 -right-2 sm:-right-4 px-3 py-1.5 rounded-2xl bg-slate-950/90 border border-amber-400/50 shadow-xl backdrop-blur-md flex items-center gap-1.5">
+                                            <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
+                                            <div>
+                                                <div class="text-[10px] font-bold text-white leading-none">1.5 Yil ROP</div>
+                                                <div class="text-[9px] text-amber-300 leading-tight">Sotuv Rahbari</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Floating 3D Badge 3: Bottom-Left (Frontend • Flutter • Bot) -->
+                                        <div class="float-badge-3 absolute -bottom-2 -left-2 sm:-left-4 px-3 py-1.5 rounded-2xl bg-slate-950/90 border border-indigo-400/50 shadow-xl backdrop-blur-md flex items-center gap-1.5">
+                                            <span class="font-mono text-xs font-bold text-sky-400">&lt;/&gt;</span>
+                                            <span class="text-[10px] font-semibold text-white">Web • Flutter • Bot</span>
+                                        </div>
+
+                                        <!-- Floating 3D Badge 4: Bottom-Right (AI 100%) -->
+                                        <div class="float-badge-1 absolute -bottom-2 -right-2 sm:-right-4 px-3 py-1.5 rounded-2xl bg-slate-950/90 border border-emerald-400/50 shadow-xl backdrop-blur-md flex items-center gap-1.5">
+                                            <i class="fa-solid fa-brain text-emerald-400 text-xs"></i>
+                                            <span class="text-[10px] font-bold text-emerald-300">AI 100% Pro</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Interactive Montage Filter Switcher -->
+                                    <div class="w-full mt-4 pt-3 border-t border-white/10">
+                                        <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2">
+                                            <span><i class="fa-solid fa-wand-magic-sparkles text-theme-primary mr-1"></i> Montaj effekti:</span>
+                                            <span id="montage-mode-label" class="text-theme-primary font-semibold">Neon Studio (Original)</span>
+                                        </div>
+                                        <div class="grid grid-cols-4 gap-1.5">
+                                            <button onclick="setMontageFilter('original', 'Neon Studio')" class="montage-btn px-2 py-1.5 rounded-xl bg-sky-500/20 border border-sky-400/50 text-[11px] font-semibold text-white transition">
+                                                Neon
+                                            </button>
+                                            <button onclick="setMontageFilter('hologram', '3D Xologramma')" class="montage-btn px-2 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-medium text-slate-300 transition">
+                                                Xologram
+                                            </button>
+                                            <button onclick="setMontageFilter('cyber', 'Kiber Kontrast')" class="montage-btn px-2 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-medium text-slate-300 transition">
+                                                Kiber HD
+                                            </button>
+                                            <button onclick="setMontageFilter('gold', 'VIP ROP Oltin')" class="montage-btn px-2 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-medium text-slate-300 transition">
+                                                VIP Gold
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quick Contact Bar Inside Hero Card -->
+                                    <div class="w-full flex items-center justify-between gap-2 mt-4 pt-3 border-t border-white/10">
+                                        <a href="https://t.me/the_tillaboyev" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-center text-xs font-semibold text-white transition">
+                                            <i class="fa-brands fa-telegram text-theme-primary mr-1"></i> Telegram
+                                        </a>
+                                        <a href="https://www.instagram.com/xojiakbarr.7?obrf=N2Z2NG9xczB4cjNx&utm_source=qr" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-center text-xs font-semibold text-white transition">
+                                            <i class="fa-brands fa-instagram text-theme-primary mr-1"></i> Instagram
+                                        </a>
+                                        <button onclick="copyPhoneNumber()" class="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-center text-xs font-semibold text-white transition">
+                                            <i class="fa-solid fa-phone text-theme-primary mr-1"></i> Raqam
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 PAGE 2: MEN HAQIMDA (ABOUT ME PAGE)
+            =========================================== -->
+            <section id="page-about" class="page-view py-6 lg:py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Page Header -->
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                        <div>
+                            <span class="px-4 py-1.5 rounded-full luxury-card text-theme-primary text-xs font-bold uppercase tracking-wider">
+                                Sahifa 02 / 06 • Shaxsiy Dosye
+                            </span>
+                            <h2 class="font-display text-3xl sm:text-5xl font-bold text-white mt-4">
+                                Men Haqimda — <span class="theme-gradient-text">Tillaboyev Xojiakbar</span>
+                            </h2>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="navigateToPage('home')" class="luxury-card px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Asosiy
+                            </button>
+                            <button onclick="navigateToPage('skills')" class="btn-primary-luxury px-5 py-2.5 rounded-xl text-xs font-semibold">
+                                Ko'nikmalar sahifasi <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Personal Profile + Biography Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+                        <!-- Left Personal Card with Real Photo -->
+                        <div class="lg:col-span-5 luxury-card rounded-3xl p-7 space-y-5">
+                            <div class="card-content space-y-5">
+                                <div class="flex flex-col sm:flex-row items-center gap-5 pb-4 border-b border-white/10">
+                                    <div onclick="document.getElementById('fileInput').click()" title="Rasmni yangilash uchun bosing" class="relative w-28 h-28 rounded-full photo-neon-ring overflow-hidden shrink-0 bg-slate-950 group cursor-pointer">
+                                        <img src="image_23b677.jpg" onerror="handleImageFallback(this)" alt="Tillaboyev Xojiakbar" class="user-portrait-img w-full h-full object-cover montage-fx-original group-hover:scale-105 transition">
+                                    </div>
+                                    <div class="text-center sm:text-left">
+                                        <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Shaxsiy Dosye</span>
+                                        <h3 class="font-display text-2xl font-bold text-white mt-0.5">Tillaboyev Xojiakbar</h3>
+                                        <p class="text-xs text-slate-300 mt-1">Yosh: <strong class="text-white">21 yoshda</strong> • O'zbekiston</p>
+                                        <button onclick="document.getElementById('fileInput').click()" class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-medium text-slate-300 hover:text-white transition">
+                                            <i class="fa-solid fa-camera text-theme-primary"></i> Rasmni tanlash
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2.5 text-xs sm:text-sm pt-1">
+                                    <div class="flex justify-between py-2 border-b border-white/5">
+                                        <span class="text-slate-400">Asosiy Kasb:</span>
+                                        <span class="text-white font-semibold">Frontend, Flutter & Python Dasturchi</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-white/5">
+                                        <span class="text-slate-400">Boshqaruv Tajribasi:</span>
+                                        <span class="text-amber-400 font-bold">1.5 Yil Sotuv Rahbari (ROP)</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-white/5">
+                                        <span class="text-slate-400">Sun'iy Intellekt (AI):</span>
+                                        <span class="text-theme-primary font-bold">100% Mukammal Ekspert</span>
+                                    </div>
+                                    <div class="flex justify-between py-2 border-b border-white/5">
+                                        <span class="text-slate-400">Ofis Dasturlari:</span>
+                                        <span class="text-white font-semibold">MS Word & Excel Mukammal</span>
+                                    </div>
+                                    <div class="flex justify-between py-2">
+                                        <span class="text-slate-400">Chet tili darajasi:</span>
+                                        <span class="text-emerald-400 font-bold">Ingliz tili — B1 Daraja</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-3 pt-2">
+                                    <button onclick="navigateToPage('contact')" class="btn-primary-luxury flex-1 py-3 rounded-xl text-xs font-bold">
+                                        Bog'lanish sahifasi
+                                    </button>
+                                    <button onclick="copyPhoneNumber()" class="luxury-card px-4 py-3 rounded-xl text-xs font-semibold text-white">
+                                        +998 91 879 20 05
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Hybrid Advantage Cards -->
+                        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="tilt-card luxury-card p-6 rounded-3xl">
+                                <div class="card-content">
+                                    <div class="w-11 h-11 rounded-2xl bg-theme-subtle flex items-center justify-center text-theme-primary text-lg mb-4">
+                                        <i class="fa-solid fa-layer-group"></i>
+                                    </div>
+                                    <h4 class="font-display text-lg font-bold text-white mb-2">1. Universal Dasturchi (Web • App • Bot)</h4>
+                                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        Men faqat bitta yo'nalish bilan cheklanmayman: <strong>Frontend</strong> orqali zamonaviy saytlar, <strong>Flutter</strong> orqali iOS/Android mobil ilovalar va <strong>Python</strong> yordamida murakkab Telegram botlarni yagona tizimga birlashtiraman.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="tilt-card luxury-card p-6 rounded-3xl">
+                                <div class="card-content">
+                                    <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-amber-400 text-lg mb-4">
+                                        <i class="fa-solid fa-chart-line"></i>
+                                    </div>
+                                    <h4 class="font-display text-lg font-bold text-white mb-2">2. 1.5 Yillik Sotuv Rahbari (ROP)</h4>
+                                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        1.5 yildan beri Sotuv menejeri va ROP sifatida ishlayman. Mijozga qanday gapirish, sotuv voronkasini qurish va konversiyani oshirishni amalda bilganim uchun, men yaratgan dasturlar haqiqiy pul olib keladi.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="tilt-card luxury-card p-6 rounded-3xl">
+                                <div class="card-content">
+                                    <div class="w-11 h-11 rounded-2xl bg-theme-subtle flex items-center justify-center text-theme-primary text-lg mb-4">
+                                        <i class="fa-solid fa-brain"></i>
+                                    </div>
+                                    <h4 class="font-display text-lg font-bold text-white mb-2">3. Sun'iy Intellekt (AI) Ustasi</h4>
+                                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        Sun'iy intellektni mukammal darajada bilaman va undan dasturlashni 5 barobar tezlashtirish, sotuv skriptlarini tahlil qilish hamda biznes jarayonlarini avtomatlashtirishda foydalanaman.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="tilt-card luxury-card p-6 rounded-3xl">
+                                <div class="card-content">
+                                    <div class="w-11 h-11 rounded-2xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400 text-lg mb-4">
+                                        <i class="fa-solid fa-file-excel"></i>
+                                    </div>
+                                    <h4 class="font-display text-lg font-bold text-white mb-2">4. Word/Excel Pro & Ingliz Tili B1</h4>
+                                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                        <strong>Word va Excel</strong> dasturlarida murakkab moliyaviy jadvallar, KPI hisobotlar va hujjatlar bilan mukammal ishlayman. <strong>Ingliz tili (B1)</strong> esa xalqaro texnologiyalarni tez o'zlashtirishimga xizmat qiladi.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 PAGE 3: KO'NIKMALAR (SKILLS PAGE)
+            =========================================== -->
+            <section id="page-skills" class="page-view py-6 lg:py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                        <div>
+                            <span class="px-4 py-1.5 rounded-full luxury-card text-theme-primary text-xs font-bold uppercase tracking-wider">
+                                Sahifa 03 / 06 • Professional Arsenal
+                            </span>
+                            <h2 class="font-display text-3xl sm:text-5xl font-bold text-white mt-4">
+                                Texnik va Boshqaruv <span class="theme-gradient-text">Ko'nikmalarim</span>
+                            </h2>
+                        </div>
+
+                        <!-- Filter Tabs -->
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="filterSkills('all')" id="skill-tab-all" class="skill-tab btn-primary-luxury px-4 py-2 rounded-xl text-xs sm:text-sm">
+                                Barchasi (6)
+                            </button>
+                            <button onclick="filterSkills('dev')" id="skill-tab-dev" class="skill-tab luxury-card px-4 py-2 rounded-xl text-xs sm:text-sm text-slate-300 hover:text-white">
+                                💻 Dasturlash
+                            </button>
+                            <button onclick="filterSkills('sales')" id="skill-tab-sales" class="skill-tab luxury-card px-4 py-2 rounded-xl text-xs sm:text-sm text-slate-300 hover:text-white">
+                                📈 Sotuv & ROP
+                            </button>
+                            <button onclick="filterSkills('ai')" id="skill-tab-ai" class="skill-tab luxury-card px-4 py-2 rounded-xl text-xs sm:text-sm text-slate-300 hover:text-white">
+                                🤖 AI, Office & Til
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Cohesive Skills Grid -->
+                    <div id="skills-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Bottom Page Navigation -->
+                    <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                        <button onclick="navigateToPage('about')" class="luxury-card px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 hover:text-white">
+                            <i class="fa-solid fa-arrow-left mr-2"></i> Oldingi: Men haqimda
+                        </button>
+                        <button onclick="navigateToPage('rop')" class="btn-primary-luxury px-6 py-3 rounded-xl text-xs sm:text-sm font-semibold">
+                            Keyingi: Sotuv & ROP sahifasi <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 PAGE 4: SOTUV & ROP + ROI CALCULATOR PAGE
+            =========================================== -->
+            <section id="page-rop" class="page-view py-6 lg:py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Header -->
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                        <div>
+                            <span class="px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
+                                Sahifa 04 / 06 • 1.5 Yillik ROP Tajriba
+                            </span>
+                            <h2 class="font-display text-3xl sm:text-5xl font-bold text-white mt-4">
+                                Sotuv Bo'limi Rahbari (ROP) & <span class="theme-gradient-text">ROI Kalkulyator</span>
+                            </h2>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="navigateToPage('skills')" class="luxury-card px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Ko'nikmalar
+                            </button>
+                            <button onclick="navigateToPage('projects')" class="btn-primary-luxury px-5 py-2.5 rounded-xl text-xs font-semibold">
+                                Loyihalar sahifasi <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ROP Executive Pillars -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                        <div class="luxury-card p-6 rounded-3xl">
+                            <div class="text-xs font-bold text-amber-400 uppercase mb-1">Sotuv Voronkasi & Skriptlar</div>
+                            <h3 class="font-display text-xl font-bold text-white mb-2">Yuqori Konversiyali Sotuv</h3>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                1.5 yil davomida sotuv menejeri va ROP sifatida sovuq hamda issiq mijozlarni bitimga olib keluvchi aniq skriptlar va e'tirozlar bilan ishlash tizimini yo'lga qo'yganman.
+                            </p>
+                        </div>
+                        <div class="luxury-card p-6 rounded-3xl">
+                            <div class="text-xs font-bold text-theme-primary uppercase mb-1">CRM + Excel Pro Analitika</div>
+                            <h3 class="font-display text-xl font-bold text-white mb-2">Raqamlar va KPI Nazorati</h3>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                MS Excel va CRM tizimlarida har bir operatorning kunlik/oylik KPI ko'rsatkichlari, konversiya foizlari va tushum hisobotlarini 100% aniqlikda tahlil qilaman.
+                            </p>
+                        </div>
+                        <div class="luxury-card p-6 rounded-3xl">
+                            <div class="text-xs font-bold text-emerald-400 uppercase mb-1">IT + AI + Sotuv Sinergiyasi</div>
+                            <h3 class="font-display text-xl font-bold text-white mb-2">Avtomatlashgan Sotuv Bo'limi</h3>
+                            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                                Python Telegram botlar va Sun'iy Intellektni bevosita sotuv bo'limiga ulab, mijozlarga 24/7 tezkor javob berish va lidlarni yo'qotmaslik tizimini yarataman.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive ROI Simulator -->
+                    <div class="luxury-card rounded-3xl p-6 sm:p-10">
+                        <div class="card-content">
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                                <!-- Controls -->
+                                <div class="lg:col-span-7 space-y-5">
+                                    <h3 class="font-display text-xl sm:text-2xl font-bold text-white">
+                                        📊 Biznesingiz uchun <span class="theme-gradient-text">IT + ROP Natija Kalkulyatori</span>
+                                    </h3>
+                                    <div class="p-5 rounded-2xl bg-slate-950/70 border border-white/10">
+                                        <div class="flex justify-between text-xs sm:text-sm font-semibold mb-2">
+                                            <span class="text-slate-300">Oylik kiruvchi mijozlar (Lidlar soni):</span>
+                                            <span id="leads-val" class="text-theme-primary font-bold">500 ta mijoz/oy</span>
+                                        </div>
+                                        <input type="range" id="leads-input" min="100" max="3000" step="100" value="500" oninput="updateROICalc()" class="w-full h-2 bg-slate-800 rounded-lg cursor-pointer">
+                                    </div>
+
+                                    <div class="space-y-3">
+                                        <label class="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 border border-white/10 hover:border-sky-400/40 cursor-pointer transition">
+                                            <div class="flex items-center gap-3">
+                                                <input type="checkbox" checked onchange="updateROICalc()" class="roi-check w-5 h-5 rounded" data-conv="18" data-hours="35">
+                                                <div>
+                                                    <div class="font-semibold text-white text-sm">🌐 Zamonaviy Frontend Sayt + Flutter Ilova</div>
+                                                    <div class="text-xs text-slate-400">Mijoz ishonchini oshiruvchi premium dizayn va mobil ilova</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-theme-primary">+18% Konversiya</span>
+                                        </label>
+
+                                        <label class="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 border border-white/10 hover:border-sky-400/40 cursor-pointer transition">
+                                            <div class="flex items-center gap-3">
+                                                <input type="checkbox" checked onchange="updateROICalc()" class="roi-check w-5 h-5 rounded" data-conv="24" data-hours="60">
+                                                <div>
+                                                    <div class="font-semibold text-white text-sm">🤖 Python Telegram Bot + 100% AI Integratsiya</div>
+                                                    <div class="text-xs text-slate-400">24/7 tezkor javob berish va AI yordamida mijozni saralash</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-theme-primary">+60 soat/oy tejash</span>
+                                        </label>
+
+                                        <label class="flex items-center justify-between p-4 rounded-2xl bg-slate-950/70 border border-white/10 hover:border-sky-400/40 cursor-pointer transition">
+                                            <div class="flex items-center gap-3">
+                                                <input type="checkbox" checked onchange="updateROICalc()" class="roi-check w-5 h-5 rounded" data-conv="32" data-hours="45">
+                                                <div>
+                                                    <div class="font-semibold text-white text-sm">👑 ROP Sotuv Tizimi + Excel Pro Analitika</div>
+                                                    <div class="text-xs text-slate-400">1.5 yillik tajriba asosida skriptlar, CRM va aniq hisobotlar</div>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-amber-400">+32% Sotuv o'sishi</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Result Display -->
+                                <div class="lg:col-span-5 bg-slate-950/90 p-6 sm:p-7 rounded-3xl border border-white/10 space-y-5">
+                                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                                        <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Prognoz Natija</span>
+                                        <span class="text-xs font-bold text-amber-400">Xojiakbar Sinergiyasi</span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                                            <div class="text-xs text-slate-400">Qo'shimcha muvaffaqiyatli bitimlar</div>
+                                            <div id="roi-extra-sales" class="font-display text-2xl sm:text-3xl font-bold text-theme-primary mt-1">+148 ta</div>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                                            <div class="text-xs text-slate-400">Avtomatlashgan ish vaqti</div>
+                                            <div id="roi-saved-hours" class="font-display text-2xl sm:text-3xl font-bold text-amber-400 mt-1">140 soat</div>
+                                        </div>
+                                    </div>
+
+                                    <p class="text-xs text-slate-300 leading-relaxed bg-white/5 p-3.5 rounded-xl">
+                                        💡 <strong>Xulosa:</strong> Dasturiy mahsulot + AI + ROP sotuv boshqaruvi birlashganda, reklama byudjetini oshirmasdan turib sotuvlarni sezilarli darajada ko'paytirish mumkin.
+                                    </p>
+
+                                    <button onclick="navigateToPage('contact')" class="btn-primary-luxury w-full py-3.5 rounded-xl text-sm flex items-center justify-center gap-2">
+                                        <span>Shu natija uchun bog'lanish</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 PAGE 5: LOYIHALAR (PROJECTS PAGE)
+            =========================================== -->
+            <section id="page-projects" class="page-view py-6 lg:py-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                        <div>
+                            <span class="px-4 py-1.5 rounded-full luxury-card text-theme-primary text-xs font-bold uppercase tracking-wider">
+                                Sahifa 05 / 06 • Portfolio Vitrinasi
+                            </span>
+                            <h2 class="font-display text-3xl sm:text-5xl font-bold text-white mt-4">
+                                Amaliy <span class="theme-gradient-text">Loyihalar va Tizimlar</span>
+                            </h2>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="navigateToPage('rop')" class="luxury-card px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white">
+                                <i class="fa-solid fa-arrow-left mr-1"></i> Sotuv & ROP
+                            </button>
+                            <button onclick="navigateToPage('contact')" class="btn-primary-luxury px-5 py-2.5 rounded-xl text-xs font-semibold">
+                                Aloqa sahifasi <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 PAGE 6: ALOQA (CONTACT PAGE)
+            =========================================== -->
+            <section id="page-contact" class="page-view py-6 lg:py-10">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                        
+                        <!-- Left: Direct Verified Channels -->
+                        <div class="lg:col-span-5 space-y-6">
+                            <div class="flex items-center gap-4 p-3.5 rounded-2xl luxury-card">
+                                <div onclick="document.getElementById('fileInput').click()" class="relative w-16 h-16 rounded-full photo-neon-ring overflow-hidden shrink-0 bg-slate-950 cursor-pointer">
+                                    <img src="image_23b677.jpg" onerror="handleImageFallback(this)" alt="Tillaboyev Xojiakbar" class="user-portrait-img w-full h-full object-cover montage-fx-original">
+                                </div>
+                                <div>
+                                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-bold uppercase tracking-wider">
+                                        ● Online • 24/7 Aloqa
+                                    </span>
+                                    <h3 class="font-display text-lg font-bold text-white mt-1">Tillaboyev Xojiakbar</h3>
+                                    <p class="text-xs text-slate-400">Dasturchi • AI Ekspert • ROP (21 yosh)</p>
+                                </div>
+                            </div>
+
+                            <h2 class="font-display text-3xl sm:text-4xl font-bold text-white">
+                                <span class="theme-gradient-text">Shaxsan Bog'lanish</span> va Hamkorlik
+                            </h2>
+                            <p class="text-slate-400 text-sm leading-relaxed">
+                                Veb-sayt, Flutter mobil ilova, Python Telegram bot, Sun'iy intellekt integratsiyasi yoki sotuv bo'limini (ROP) rivojlantirish bo'yicha taklifingiz bormi? Hoziroq bog'laning:
+                            </p>
+
+                            <div class="space-y-3.5">
+                                <!-- Phone Card -->
+                                <div class="luxury-card p-4 rounded-2xl flex items-center justify-between">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-2xl bg-theme-subtle flex items-center justify-center text-theme-primary text-lg">
+                                            <i class="fa-solid fa-phone"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-slate-400">Telefon raqam (24/7)</div>
+                                            <a href="tel:+998918792005" class="font-display font-bold text-white text-base hover:text-theme-primary transition">
+                                                +998 91 879 20 05
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <button onclick="copyPhoneNumber()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition">
+                                        Nusxalash
+                                    </button>
+                                </div>
+
+                                <!-- Telegram Card -->
+                                <a href="https://t.me/the_tillaboyev" target="_blank" rel="noopener noreferrer" class="luxury-card p-4 rounded-2xl flex items-center justify-between group">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-2xl bg-theme-subtle flex items-center justify-center text-theme-primary text-xl">
+                                            <i class="fa-brands fa-telegram"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-slate-400">Telegram (Tezkor javob)</div>
+                                            <div class="font-display font-bold text-white text-base group-hover:text-theme-primary transition">
+                                                @the_tillaboyev
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1.5 rounded-xl bg-white/10 group-hover:bg-white/20 text-xs font-semibold text-white transition">
+                                        Yozish <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+                                    </span>
+                                </a>
+
+                                <!-- Instagram Card -->
+                                <a href="https://www.instagram.com/xojiakbarr.7?obrf=N2Z2NG9xczB4cjNx&utm_source=qr" target="_blank" rel="noopener noreferrer" class="luxury-card p-4 rounded-2xl flex items-center justify-between group">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-12 h-12 rounded-2xl bg-theme-subtle flex items-center justify-center text-theme-primary text-xl">
+                                            <i class="fa-brands fa-instagram"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs text-slate-400">Instagram sahifam</div>
+                                            <div class="font-display font-bold text-white text-base group-hover:text-theme-primary transition">
+                                                @xojiakbarr.7
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="px-3 py-1.5 rounded-xl bg-white/10 group-hover:bg-white/20 text-xs font-semibold text-white transition">
+                                        Ochish <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Right: Instant Telegram Request Composer -->
+                        <div class="lg:col-span-7">
+                            <form onsubmit="sendToTelegram(event)" class="luxury-card p-6 sm:p-8 rounded-3xl space-y-5">
+                                <div class="card-content space-y-5">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-display font-bold text-xl text-white">Loyiha bo'yicha tezkor ariza</h3>
+                                        <span class="text-xs text-theme-primary font-semibold">@the_tillaboyev ga boradi</span>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Ismingiz</label>
+                                            <input type="text" id="client-name" required placeholder="Ismingizni kiriting" class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-sky-400">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Telefon raqamingiz</label>
+                                            <input type="text" id="client-phone" required placeholder="+998 90 123 45 67" class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-sky-400">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Yo'nalishni tanlang</label>
+                                        <select id="client-service" class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-sky-400">
+                                            <option value="Frontend Veb-sayt">🌐 Zamonaviy Frontend Veb-sayt</option>
+                                            <option value="Flutter Mobil Ilova">📱 Flutter Mobil Ilova (Android / iOS)</option>
+                                            <option value="Python Telegram Bot">🤖 Python Telegram Bot yaratish</option>
+                                            <option value="Sun'iy Intellekt (AI) Yechimi">🧠 Sun'iy Intellekt (AI) integratsiyasi</option>
+                                            <option value="Sotuv Rahbari (ROP) & Konsalting">📈 Sotuv bo'limi (ROP) va CRM tizimlashtirish</option>
+                                            <option value="Kompleks Hamkorlik">💼 Kompleks: Dasturlash + Sotuv (ROP)</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-300 mb-1.5">Xabar yoki loyiha tavsifi</label>
+                                        <textarea id="client-msg" rows="3" required placeholder="Loyihangiz haqida qisqacha yozing..." class="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-white/10 text-white text-sm focus:outline-none focus:border-sky-400"></textarea>
+                                    </div>
+
+                                    <button type="submit" class="btn-primary-luxury w-full py-4 rounded-xl text-sm flex items-center justify-center gap-2">
+                                        <i class="fa-brands fa-telegram text-base"></i>
+                                        <span>Telegram orqali Xojiakbarga yuborish</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative z-10 border-t border-white/10 bg-slate-950/90 py-8 text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                © 2026 <strong class="text-white">Tillaboyev Xojiakbar (21 yosh)</strong>. Barcha huquqlar himoyalangan.
+            </div>
+            <div class="flex items-center gap-5">
+                <a href="tel:+998918792005" class="hover:text-white transition">+998 91 879 20 05</a>
+                <a href="https://t.me/the_tillaboyev" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">@the_tillaboyev</a>
+                <a href="https://www.instagram.com/xojiakbarr.7?obrf=N2Z2NG9xczB4cjNx&utm_source=qr" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PROJECT MODAL -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
+        <div class="luxury-card max-w-xl w-full rounded-3xl p-6 sm:p-8 border border-sky-400/40 relative">
+            <div class="card-content">
+                <button onclick="closeModal()" class="absolute top-0 right-0 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <span id="modal-badge" class="inline-block px-3 py-1 rounded-full bg-theme-subtle text-theme-primary text-xs font-bold mb-3"></span>
+                <h3 id="modal-title" class="font-display text-2xl font-bold text-white mb-3"></h3>
+                <p id="modal-desc" class="text-slate-300 text-sm leading-relaxed mb-5"></p>
+                <div class="p-4 rounded-2xl bg-slate-950/80 border border-white/10 mb-5">
+                    <div class="text-xs font-bold text-amber-400 mb-1">🎯 Biznes va Sotuv Natijasi:</div>
+                    <p id="modal-impact" class="text-xs text-slate-300 leading-relaxed"></p>
+                </div>
+                <div id="modal-tags" class="flex flex-wrap gap-2 mb-6"></div>
+                <button onclick="closeModal()" class="btn-primary-luxury w-full py-3 rounded-xl text-sm">
+                    Yopish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT: DATA, THEME HARMONY & THREE.JS
+    =========================================== -->
+    <script>
+        /* 1. SKILLS DATA */
+        const skillsData = [
+            {
+                title: "Frontend Web Dasturlash",
+                category: "dev",
+                level: 95,
+                icon: "fa-brands fa-react",
+                badge: "Web UI/UX & 3D",
+                desc: "HTML5, CSS3, Tailwind CSS, JavaScript va React yordamida zamonaviy, 3D animatsiyali va yuqori konversiyali veb-saytlar yaratish."
+            },
+            {
+                title: "Flutter Mobil Dasturlash",
+                category: "dev",
+                level: 92,
+                icon: "fa-solid fa-mobile-screen-button",
+                badge: "iOS & Android",
+                desc: "Dart va Flutter texnologiyasi orqali bitta kod bazasida iOS va Android uchun tezkor, silliq ishlovchi mobil ilovalar ishlab chiqish."
+            },
+            {
+                title: "Python & Telegram Botlar",
+                category: "dev",
+                level: 96,
+                icon: "fa-brands fa-python",
+                badge: "Avtomatizatsiya",
+                desc: "Aiogram va Python orqali murakkab Telegram botlar, internet-do'kon botlari, narx tahlil qiluvchi parserlar va CRM integratsiyalar."
+            },
+            {
+                title: "Sotuv Rahbari (ROP) & Menejer",
+                category: "sales",
+                level: 98,
+                icon: "fa-solid fa-crown",
+                badge: "1.5 Yil Tajriba",
+                desc: "1.5 yillik amaliy tajriba: Sotuv jamoasini boshqarish, skriptlar yozish, CRM voronkasi, KPI nazorati va konversiyani maksimal oshirish."
+            },
+            {
+                title: "Sun'iy Intellekt (AI) — Mukammal",
+                category: "ai",
+                level: 100,
+                icon: "fa-solid fa-brain",
+                badge: "100% Ekspert",
+                desc: "ChatGPT, Claude, AI API integratsiya va Prompt Engineering yordamida biznes hamda dasturlash jarayonlarini 5 barobar tezlashtirish."
+            },
+            {
+                title: "MS Word, Excel Pro & Ingliz tili B1",
+                category: "ai",
+                level: 96,
+                icon: "fa-solid fa-file-excel",
+                badge: "Office Pro • Eng B1",
+                desc: "Word va Excel dasturlarida murakkab jadvallar, moliyaviy/sotuv hisobotlari bilan mukammal ishlash hamda Ingliz tili (B1) bilimi."
+            }
+        ];
+
+        /* 2. PROJECTS DATA */
+        const projectsData = [
+            {
+                id: 1,
+                badge: "Python • Telegram Bot • AI",
+                title: "«Eng Arzon Narx» — Marketpleys Tahlil va Qidiruv Boti",
+                shortDesc: "O'zbekistondagi onlayn do'konlar bo'ylab mahsulot narxlarini solishtirib, mijozga eng arzon variantni topib beruvchi aqlli Python bot.",
+                fullDesc: "Python (Aiogram), Web-scraping va Sun'iy Intellekt algoritmlari yordamida yaratilgan tizim. Foydalanuvchi qidirayotgan mahsulotni bir necha soniyada tahlil qilib, eng hamyonbop takliflarni havolasi bilan taqdim etadi.",
+                impact: "Mijozlarning qidiruv vaqtini 85% ga qisqartiradi va sotuvchilar uchun tayyor issiq mijozlar oqimini shakllantiradi.",
+                tags: ["Python", "Aiogram", "Web Scraping", "AI Search", "PostgreSQL"]
+            },
+            {
+                id: 2,
+                badge: "Flutter • CRM • ROP Tajriba",
+                title: "SalesFlow — Sotuv Bo'limi va ROP Mobil Ilovasi",
+                shortDesc: "1.5 yillik ROP tajribam asosida sotuv menejerlari KPI ko'rsatkichlari va kunlik lidlarni nazorat qilish uchun yaratilgan Flutter ilova.",
+                fullDesc: "Android va iOS qurilmalarda ishlovchi korporativ ilova. Sotuv menejerlari har bir mijoz holatini kiritib boradi, rahbar (ROP) esa real vaqtda konversiya va Excel hisobotlarni kuzatadi.",
+                impact: "Sotuv bo'limida yo'qotiladigan lidlarni 0% ga tushiradi va jamoa samaradorligini +40% ga oshiradi.",
+                tags: ["Flutter", "Dart", "Firebase", "Excel Export", "ROP Analytics"]
+            },
+            {
+                id: 3,
+                badge: "AI Ekspert • Excel Pro • Avtomatika",
+                title: "AI Sotuv Assistenti & Avtomatlashgan Hisobot Tizimi",
+                shortDesc: "Mijozlar bilan muloqot skriptlarini AI yordamida tahlil qiluvchi va murakkab Excel jadvallarini avtomatik to'ldiruvchi tizim.",
+                fullDesc: "Sun'iy intellekt (LLM) va Excel integratsiyasi. Sotuv bo'limi qo'ng'iroqlari va yozishmalari tahlil qilinib, xodimlarning kuchli va zaif tomonlari bo'yicha aniq analitik jadval shakllantiriladi.",
+                impact: "Sotuv rahbari (ROP) ning hisobot tuzishga ketadigan vaqtini kuniga 3 soatga tejaydi.",
+                tags: ["OpenAI API", "Prompt Engineering", "MS Excel Pro", "Python"]
+            },
+            {
+                id: 4,
+                badge: "Frontend • Three.js • 3D Web",
+                title: "Premium 3D Korporativ va Shaxsiy Brend Platformalari",
+                shortDesc: "Three.js 3D modellari, silliq animatsiyalar va sotuv psixologiyasi asosida qurilgan zamonaviy Frontend veb-saytlar.",
+                fullDesc: "Ushbu portfolio kabi mukammal ranglar uyg'unligi, interaktiv 3D ob'ektlar va mobil qurilmalarga 100% moslashuvchan zamonaviy veb-ilovalar.",
+                impact: "Saytga kirgan mijozlarning ariza qoldirish konversiyasini odatiy saytlarga nisbatan 2.5 barobarga oshiradi.",
+                tags: ["HTML5", "Tailwind CSS", "JavaScript", "Three.js 3D", "UI/UX"]
+            }
+        ];
+
+        /* Render Skills */
+        function renderSkills(filter = 'all') {
+            const container = document.getElementById('skills-container');
+            const list = filter === 'all' ? skillsData : skillsData.filter(s => s.category === filter);
+
+            container.innerHTML = list.map(s => `
+                <div class="tilt-card luxury-card p-6 rounded-3xl flex flex-col justify-between">
+                    <div class="card-content">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-theme-subtle flex items-center justify-center text-theme-primary text-xl">
+                                <i class="${s.icon}"></i>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-slate-300">
+                                ${s.badge}
+                            </span>
+                        </div>
+                        <div class="flex items-baseline justify-between mb-2">
+                            <h3 class="font-display font-bold text-lg text-white">${s.title}</h3>
+                            <span class="font-display font-bold text-sm text-theme-primary">${s.level}%</span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-5">${s.desc}</p>
+                        <div class="w-full h-2 rounded-full bg-slate-900 overflow-hidden p-[1px]">
+                            <div class="h-full rounded-full btn-primary-luxury" style="width: ${s.level}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            initInteractiveCards();
+        }
+
+        function filterSkills(cat) {
+            document.querySelectorAll('.skill-tab').forEach(btn => {
+                btn.className = "skill-tab luxury-card px-4 py-2 rounded-xl text-xs sm:text-sm text-slate-300 hover:text-white";
+            });
+            const active = document.getElementById(`skill-tab-${cat}`);
+            if (active) {
+                active.className = "skill-tab btn-primary-luxury px-4 py-2 rounded-xl text-xs sm:text-sm";
+            }
+            renderSkills(cat);
+        }
+
+        /* Render Projects */
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = projectsData.map(p => `
+                <div onclick="openModal(${p.id})" class="tilt-card luxury-card rounded-3xl p-6 sm:p-8 cursor-pointer group">
+                    <div class="card-content">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3.5 py-1 rounded-full bg-theme-subtle text-theme-primary text-xs font-bold">
+                                ${p.badge}
+                            </span>
+                            <span class="w-9 h-9 rounded-full bg-white/5 group-hover:bg-white/15 text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </span>
+                        </div>
+                        <h3 class="font-display text-xl sm:text-2xl font-bold text-white group-hover:text-theme-primary transition mb-3">
+                            ${p.title}
+                        </h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-5">
+                            ${p.shortDesc}
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            ${p.tags.map(t => `<span class="text-[11px] px-2.5 py-1 rounded-lg bg-slate-950/80 border border-white/10 text-slate-300">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            initInteractiveCards();
+        }
+
+        function openModal(id) {
+            const p = projectsData.find(item => item.id === id);
+            if (!p) return;
+            document.getElementById('modal-badge').textContent = p.badge;
+            document.getElementById('modal-title').textContent = p.title;
+            document.getElementById('modal-desc').textContent = p.fullDesc;
+            document.getElementById('modal-impact').textContent = p.impact;
+            document.getElementById('modal-tags').innerHTML = p.tags.map(t => 
+                `<span class="text-xs px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-slate-200">${t}</span>`
+            ).join('');
+            const m = document.getElementById('project-modal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeModal() {
+            const m = document.getElementById('project-modal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        /* ROI Calculator */
+        function updateROICalc() {
+            const leads = parseInt(document.getElementById('leads-input').value);
+            document.getElementById('leads-val').textContent = `${leads} ta mijoz/oy`;
+
+            const checks = document.querySelectorAll('.roi-check:checked');
+            let convBoost = 0;
+            let savedHours = 0;
+
+            checks.forEach(c => {
+                convBoost += parseInt(c.dataset.conv);
+                savedHours += parseInt(c.dataset.hours);
+            });
+
+            const extraSales = Math.round((leads * (convBoost / 100)) * 0.45);
+            document.getElementById('roi-extra-sales').textContent = `+${extraSales} ta`;
+            document.getElementById('roi-saved-hours').textContent = `${savedHours} soat`;
+        }
+
+        /* Copy Phone Number with Fallback */
+        function copyPhoneNumber() {
+            const phone = "+998918792005";
+            const tempInput = document.createElement("textarea");
+            tempInput.value = phone;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const toast = document.getElementById('toast-notification');
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3200);
+        }
+
+        /* Send Formatted Message to Xojiakbar's Telegram */
+        function sendToTelegram(e) {
+            e.preventDefault();
+            const name = document.getElementById('client-name').value.trim();
+            const phone = document.getElementById('client-phone').value.trim();
+            const service = document.getElementById('client-service').value;
+            const msg = document.getElementById('client-msg').value.trim();
+
+            const text = `Assalomu alaykum Xojiakbar! Portfolio saytingiz orqali murojaat qilyapman:%0A%0A👤 Ism: ${encodeURIComponent(name)}%0A📞 Tel: ${encodeURIComponent(phone)}%0A🚀 Yo'nalish: ${encodeURIComponent(service)}%0A💬 Xabar: ${encodeURIComponent(msg)}`;
+            window.open(`https://t.me/the_tillaboyev?text=${text}`, '_blank');
+        }
+
+        /* =========================================================
+           DIRECT REAL PHOTO LOADER (NO FAKE CARTOON OR SVG AVATAR)
+        ========================================================= */
+        // GitHub Pages: agar haqiqiy rasm repositoryga yuklanmagan bo'lsa,
+        // buzilgan rasm o'rniga neytral avatar ko'rsatiladi.
+        function handleImageFallback(imgEl) {
+            let savedPhoto = null;
+            try {
+                savedPhoto = localStorage.getItem('xojiakbar_real_photo_v2');
+            } catch (error) {
+                // Maxfiy rejimda storage bloklangan bo'lishi mumkin.
+            }
+            if (savedPhoto && imgEl.src !== savedPhoto) {
+                imgEl.onerror = null;
+                imgEl.src = savedPhoto;
+                return;
+            }
+            imgEl.onerror = null;
+            imgEl.src = 'placeholder-avatar.svg';
+            document.querySelectorAll('.photo-upload-hint').forEach(el => {
+                el.classList.remove('opacity-0');
+                el.classList.add('opacity-100');
+            });
+        }
+
+        function initUserPortraits() {
+            let savedPhoto = null;
+            try { savedPhoto = localStorage.getItem('xojiakbar_real_photo_v2'); } catch (error) {}
+            if (savedPhoto) {
+                document.querySelectorAll('.user-portrait-img').forEach(img => {
+                    img.src = savedPhoto;
+                });
+                document.querySelectorAll('.photo-upload-hint').forEach(el => {
+                    el.classList.remove('opacity-100');
+                    el.classList.add('opacity-0');
+                });
+            }
+        }
+
+        function triggerPhotoPicker() {
+            const input = document.getElementById('fileInput');
+            if (input) input.click();
+        }
+
+        function applyPhotoFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                try {
+                    localStorage.setItem('xojiakbar_real_photo_v2', dataUrl);
+                } catch (err) {
+                    console.warn('LocalStorage quota exceeded, applying in-memory.');
+                }
+                document.querySelectorAll('.user-portrait-img').forEach(img => {
+                    img.src = dataUrl;
+                });
+                document.querySelectorAll('.photo-upload-hint').forEach(el => {
+                    el.classList.remove('opacity-100');
+                    el.classList.add('opacity-0');
+                });
+                const toast = document.getElementById('toast-notification');
+                document.getElementById('toast-title').textContent = "Rasmingiz o'rnatildi!";
+                document.getElementById('toast-desc').textContent = "Barcha sahifalarda haqiqiy rasmingiz saqlandi";
+                toast.classList.remove('hidden');
+                toast.classList.add('flex');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('flex');
+                }, 3500);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleUserPhotoUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            applyPhotoFile(file);
+        }
+
+        // Enable Drag & Drop Photo Anywhere on Page
+        window.addEventListener('dragover', e => {
+            e.preventDefault();
+        });
+        window.addEventListener('drop', e => {
+            e.preventDefault();
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                applyPhotoFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        function setMontageFilter(mode, labelText) {
+            const label = document.getElementById('montage-mode-label');
+            if (label) label.textContent = labelText;
+
+            document.querySelectorAll('.user-portrait-img').forEach(img => {
+                img.classList.remove('montage-fx-original', 'montage-fx-hologram', 'montage-fx-cyber', 'montage-fx-gold');
+                img.classList.add(`montage-fx-${mode}`);
+            });
+
+            const scanline = document.getElementById('hero-scanline');
+            if (scanline) {
+                scanline.style.opacity = (mode === 'hologram' || mode === 'cyber') ? '0.75' : '0.3';
+            }
+        }
+
+        /* Card Spotlight & 3D Tilt Physics */
+        function initInteractiveCards() {
+            document.querySelectorAll('.luxury-card').forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+
+                    if (card.classList.contains('tilt-card')) {
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        const rotateX = ((y - centerY) / centerY) * -5;
+                        const rotateY = ((x - centerX) / centerX) * 5;
+                        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    }
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    if (card.classList.contains('tilt-card')) {
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                    }
+                });
+            });
+        }
+
+        /* =========================================================
+           3. THREE.JS HARMONIOUS 3D ENGINE + LIVE THEME SYNC
+        ========================================================= */
+        let scene, camera, renderer, mainGroup, outerWire, innerCrystal, ring1, ring2, particles;
+        let light1, light2;
+        let mouseX = 0, mouseY = 0;
+        let speedMultiplier = 1.0;
+
+        const themePalettes = {
+            royal:   { primary: 0x38BDF8, secondary: 0x6366F1 },
+            emerald: { primary: 0x10B981, secondary: 0x14B8A6 },
+            gold:    { primary: 0xF59E0B, secondary: 0xD97706 }
+        };
+        let currentTheme = 'royal';
+
+        /* =========================================================
+           MULTI-PAGE ROUTER + 3D CAMERA & GEOMETRY MORPHING
+        ========================================================= */
+        const page3DConfig = {
+            home:     { mode: 'core',  camZ: 26, posX: 7.2,  posY: 0,    rotZ: 0 },
+            about:    { mode: 'helix', camZ: 23, posX: -7.0, posY: 1.2,  rotZ: 0.4 },
+            skills:   { mode: 'nexus', camZ: 28, posX: 0,    posY: 0,    rotZ: -0.35 },
+            rop:      { mode: 'core',  camZ: 22, posX: 6.5,  posY: -1.0, rotZ: 0.6 },
+            projects: { mode: 'nexus', camZ: 27, posX: -6.0, posY: 0.5,  rotZ: 0.25 },
+            contact:  { mode: 'helix', camZ: 21, posX: 6.2,  posY: 0,    rotZ: -0.5 }
+        };
+
+        let targetCamZ = 26;
+        let targetGroupX = 7.2;
+        let targetGroupY = 0;
+        let targetGroupRotZ = 0;
+        let currentPage = 'home';
+
+        function navigateToPage(pageId) {
+            if (!document.getElementById(`page-${pageId}`)) return;
+            currentPage = pageId;
+
+            // Trigger Top Warp Transition Bar
+            const bar = document.getElementById('page-transition-bar');
+            if (bar) {
+                bar.style.opacity = '1';
+                bar.style.width = '75%';
+                setTimeout(() => {
+                    bar.style.width = '100%';
+                    setTimeout(() => {
+                        bar.style.opacity = '0';
+                        bar.style.width = '0%';
+                    }, 220);
+                }, 180);
+            }
+
+            // Switch Active Page View
+            document.querySelectorAll('.page-view').forEach(sec => {
+                sec.classList.remove('active-page');
+            });
+            const targetSec = document.getElementById(`page-${pageId}`);
+            targetSec.classList.add('active-page');
+
+            // Update Desktop & Mobile Navbar Active States
+            ['home', 'about', 'skills', 'rop', 'projects', 'contact'].forEach(id => {
+                const dBtn = document.getElementById(`nav-${id}`);
+                const mBtn = document.getElementById(`mnav-${id}`);
+                if (dBtn) dBtn.classList.toggle('active-nav', id === pageId);
+                if (mBtn) mBtn.classList.toggle('active-nav', id === pageId);
+            });
+
+            // Scroll cleanly to top of new isolated page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Morph 3D Scene Camera & Geometry for the selected Page
+            const cfg = page3DConfig[pageId] || page3DConfig.home;
+            switch3DMode(cfg.mode);
+            targetCamZ = cfg.camZ;
+            targetGroupX = window.innerWidth > 1024 ? cfg.posX : 0;
+            targetGroupY = cfg.posY;
+            targetGroupRotZ = cfg.rotZ;
+
+            // Burst rotation impulse on page switch
+            if (outerWire && innerCrystal) {
+                outerWire.rotation.y += 0.65;
+                innerCrystal.rotation.x += 0.65;
+            }
+        }
+
+        function setLuxuryTheme(themeName) {
+            currentTheme = themeName;
+            document.body.setAttribute('data-theme', themeName);
+
+            ['royal', 'emerald', 'gold'].forEach(t => {
+                const btn = document.getElementById(`theme-btn-${t}`);
+                if (t === themeName) {
+                    btn.classList.add('ring-2', 'ring-white', 'scale-110');
+                    btn.classList.remove('opacity-70');
+                } else {
+                    btn.classList.remove('ring-2', 'ring-white', 'scale-110');
+                    btn.classList.add('opacity-70');
+                }
+            });
+
+            // Sync 3D Colors Instantly
+            const pal = themePalettes[themeName];
+            if (outerWire && innerCrystal) {
+                outerWire.material.color.setHex(pal.primary);
+                outerWire.material.emissive.setHex(pal.primary);
+                innerCrystal.material.color.setHex(pal.secondary);
+                innerCrystal.material.emissive.setHex(pal.secondary);
+                ring1.material.color.setHex(pal.primary);
+                ring2.material.color.setHex(pal.secondary);
+                light1.color.setHex(pal.primary);
+                light2.color.setHex(pal.secondary);
+                particles.material.color.setHex(pal.primary);
+            }
+        }
+
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            if (!container || typeof THREE === 'undefined') return;
+            try {
+                initThreeJSScene(container);
+            } catch (err) {
+                console.warn('3D effektni ishga tushirib bo\'lmadi:', err);
+            }
+        }
+
+        function initThreeJSScene(container) {
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 26;
+
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            mainGroup = new THREE.Group();
+            scene.add(mainGroup);
+
+            const ambient = new THREE.AmbientLight(0xffffff, 0.75);
+            scene.add(ambient);
+
+            const pal = themePalettes[currentTheme];
+            light1 = new THREE.PointLight(pal.primary, 2.5, 100);
+            light1.position.set(16, 16, 16);
+            scene.add(light1);
+
+            light2 = new THREE.PointLight(pal.secondary, 2.5, 100);
+            light2.position.set(-16, -16, 12);
+            scene.add(light2);
+
+            build3DGeometry('core');
+
+            // Orbital Rings
+            ring1 = new THREE.Mesh(
+                new THREE.TorusGeometry(11.2, 0.05, 16, 100),
+                new THREE.MeshBasicMaterial({ color: pal.primary, transparent: true, opacity: 0.32 })
+            );
+            ring1.rotation.x = Math.PI / 2.2;
+            mainGroup.add(ring1);
+
+            ring2 = new THREE.Mesh(
+                new THREE.TorusGeometry(13.6, 0.04, 16, 100),
+                new THREE.MeshBasicMaterial({ color: pal.secondary, transparent: true, opacity: 0.22 })
+            );
+            ring2.rotation.y = Math.PI / 3;
+            mainGroup.add(ring2);
+
+            // Cohesive Starfield Particles
+            const pCount = 750;
+            const pos = new Float32Array(pCount * 3);
+            for (let i = 0; i < pCount * 3; i++) {
+                pos[i] = (Math.random() - 0.5) * 85;
+            }
+            const pGeo = new THREE.BufferGeometry();
+            pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const pMat = new THREE.PointsMaterial({
+                color: pal.primary,
+                size: 0.16,
+                transparent: true,
+                opacity: 0.55
+            });
+            particles = new THREE.Points(pGeo, pMat);
+            scene.add(particles);
+
+            updateLayoutPosition();
+
+            document.addEventListener('mousemove', e => {
+                mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
+                mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                updateLayoutPosition();
+            });
+
+            const slider = document.getElementById('speed-slider');
+            if (slider) {
+                slider.addEventListener('input', e => {
+                    speedMultiplier = parseFloat(e.target.value);
+                    document.getElementById('speed-value').textContent = `${speedMultiplier.toFixed(1)}x Tezlik`;
+                });
+            }
+
+            animateScene();
+        }
+
+        function build3DGeometry(mode) {
+            if (outerWire) mainGroup.remove(outerWire);
+            if (innerCrystal) mainGroup.remove(innerCrystal);
+
+            const pal = themePalettes[currentTheme];
+            let geoOuter, geoInner;
+
+            if (mode === 'core') {
+                geoOuter = new THREE.IcosahedronGeometry(7.2, 2);
+                geoInner = new THREE.OctahedronGeometry(4.4, 1);
+            } else if (mode === 'nexus') {
+                geoOuter = new THREE.TorusKnotGeometry(5.4, 1.4, 110, 16);
+                geoInner = new THREE.IcosahedronGeometry(3.2, 1);
+            } else {
+                geoOuter = new THREE.DodecahedronGeometry(7.4, 1);
+                geoInner = new THREE.TorusKnotGeometry(3.6, 0.85, 90, 12);
+            }
+
+            outerWire = new THREE.Mesh(
+                geoOuter,
+                new THREE.MeshStandardMaterial({
+                    color: pal.primary,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.28,
+                    emissive: pal.primary,
+                    emissiveIntensity: 0.25
+                })
+            );
+
+            innerCrystal = new THREE.Mesh(
+                geoInner,
+                new THREE.MeshStandardMaterial({
+                    color: pal.secondary,
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.45,
+                    emissive: pal.secondary,
+                    emissiveIntensity: 0.35
+                })
+            );
+
+            mainGroup.add(outerWire);
+            mainGroup.add(innerCrystal);
+        }
+
+        function switch3DMode(mode) {
+            if (mainGroup && typeof THREE !== 'undefined') build3DGeometry(mode);
+            ['core', 'nexus', 'helix'].forEach(m => {
+                const btn = document.getElementById(`mode-${m}`);
+                if (m === mode) {
+                    btn.className = "px-3 py-1 rounded-full text-xs font-semibold btn-primary-luxury";
+                } else {
+                    btn.className = "px-3 py-1 rounded-full text-xs font-medium text-slate-300 hover:text-white transition";
+                }
+            });
+        }
+
+        function updateLayoutPosition() {
+            if (!mainGroup) return;
+            const cfg = page3DConfig[currentPage] || page3DConfig.home;
+            targetGroupX = window.innerWidth > 1024 ? cfg.posX : 0;
+        }
+
+        function animateScene() {
+            requestAnimationFrame(animateScene);
+
+            if (outerWire && innerCrystal) {
+                outerWire.rotation.y += 0.003 * speedMultiplier;
+                outerWire.rotation.x += 0.0018 * speedMultiplier;
+                innerCrystal.rotation.y -= 0.005 * speedMultiplier;
+                innerCrystal.rotation.z += 0.003 * speedMultiplier;
+            }
+
+            if (ring1 && ring2) {
+                ring1.rotation.z -= 0.0035 * speedMultiplier;
+                ring2.rotation.x += 0.0025 * speedMultiplier;
+            }
+
+            if (mainGroup && camera) {
+                // Smoothly interpolate 3D position and camera depth per active page
+                camera.position.z += (targetCamZ - camera.position.z) * 0.06;
+                mainGroup.position.x += (targetGroupX - mainGroup.position.x) * 0.06;
+                mainGroup.position.y += (targetGroupY - mainGroup.position.y) * 0.06;
+                mainGroup.rotation.z += (targetGroupRotZ - mainGroup.rotation.z) * 0.06;
+
+                mainGroup.rotation.y += 0.05 * (mouseX - mainGroup.rotation.y);
+                mainGroup.rotation.x += 0.05 * (mouseY - mainGroup.rotation.x);
+            }
+
+            if (particles) {
+                particles.rotation.y += 0.0004 * speedMultiplier;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.onload = function () {
+            initUserPortraits();
+            renderSkills('all');
+            renderProjects();
+            updateROICalc();
+            initThreeJS();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" role="img" aria-label="Profil surati hali yuklanmagan">
+ <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#07152a"/><stop offset="1" stop-color="#153c71"/></linearGradient><radialGradient id="r"><stop stop-color="#11d0ee" stop-opacity=".38"/><stop offset="1" stop-color="#11d0ee" stop-opacity="0"/></radialGradient></defs>
+ <rect width="500" height="500" fill="url(#g)"/>
+ <circle cx="250" cy="215" r="220" fill="url(#r)"/>
+ <circle cx="250" cy="250" r="195" fill="none" stroke="#02d2fc" stroke-opacity=".75" stroke-width="4"/>
+ <text x="250" y="268" fill="#effaff" font-size="112" font-weight="700" text-anchor="middle" font-family="Arial, sans-serif">TX</text>
+ <text x="250" y="322" fill="#afcde2" font-size="24" text-anchor="middle" font-family="Arial, sans-serif">PROFIL SURATI</text>
+</svg>
