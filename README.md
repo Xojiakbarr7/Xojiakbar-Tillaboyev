@@ -1,24 +1,26 @@
 # Tillaboyev Xojiakbar — shaxsiy portfolio
 
-GitHub Pages uchun tayyor statik sayt. Backend, npm yoki server kerak emas.
+Frontend, Flutter, Python, AI va sotuv boshqaruvi haqida 6 bo‘limli shaxsiy veb-sayt.
 
-## Joylash
+## Sayt manzili
 
-1. GitHub'da **public** repository yarating: `xojiakbar-portfolio`. README qo'shmang (agar ZIP fayllarni birinchi marta yuklayotgan bo'lsangiz).
-2. Ushbu papkaning **ichidagi** `index.html`, `placeholder-avatar.svg`, `favicon.svg`, `.nojekyll`, `README.md` fayllarini repository ildiziga (`/`) yuklang. **ZIP faylning o'zini yuklamang:** `index.html` GitHub'da alohida ko'rinishi kerak. GitHub web orqali upload yashirin `.nojekyll` faylini qabul qilmasa, bu fayl shart emas.
-3. GitHub repository ichida: **Settings → Pages → Build and deployment → Source: Deploy from a branch** ni tanlang. `main` va `/(root)` ni tanlab **Save** bosing.
-4. Nashrdan so'ng manzil: `https://Xojiakbarr7.github.io/xojiakbar-portfolio/`.
+GitHub Pages faollashtirilganidan keyin: **https://xojiakbarr7.github.io/Xojiakbar-Tillaboyev/**
 
-## Suratni barcha foydalanuvchilar uchun qo'shish
+## GitHub Pages'ni bir marta yoqish
 
-Shaxsiy haqiqiy suratingizni `image_23b677.jpg` nomi bilan repo ildiziga yuklang. Saytdagi barcha tasvirlar avtomatik uni ko'rsatadi. Rasm yuklanmagunicha `TX` belgisi ko'rsatiladi.
+1. [Repository Settings → Pages](https://github.com/Xojiakbarr7/Xojiakbar-Tillaboyev/settings/pages) sahifasini oching.
+2. **Build and deployment → Source** dan **GitHub Actions** ni tanlang.
+3. [Actions → Deploy portfolio to GitHub Pages](https://github.com/Xojiakbarr7/Xojiakbar-Tillaboyev/actions/workflows/deploy-pages.yml) sahifasida kerak bo‘lsa **Run workflow** bosing.
+4. Yashil bajarilganidan so‘ng saytingiz yuqoridagi URL orqali ochiladi.
 
-Saytdagi **Rasmni yuklash** tugmasi orqali tanlangan surat brauzer xotirasiga yoziladi va **faqat shu qurilmada/brauzerda** saqlanadi. Hamma ko'rishi uchun rasmingizni albatta GitHub repositoryga yuklang.
+Kelajakda `main` ga kod yuklaganingizda sayt avtomatik qayta nashr qilinadi.
 
-## Tekshirish
+## Profil surati
 
-`index.html` faylini brauzerda oching yoki lokal tekshirish uchun shu papkada `python -m http.server 8000` ishga tushirib `http://localhost:8000` ga kiring.
+Haqiqiy rasmingizni `image_23b677.jpg` nomi bilan repository ildiziga yuklang. Hozircha `placeholder-avatar.svg` ko‘rsatiladi. Saytdagi **Rasmni yuklash** tugmasi orqali tanlangan surat faqat o‘sha brauzerning localStorage xotirasida saqlanadi; boshqa odamlarga ko‘rinishi uchun rasmni GitHub'ga yuklang.
 
-Tailwind CSS, Three.js, Font Awesome va Google Fonts CDN orqali yuklanadi. To'liq dizayn uchun internet kerak. Agar WebGL qo'llab-quvvatlanmasa, 3D fon ishlamasligi mumkin, lekin sahifa navigatsiyasi ishlashda davom etadi.
+## Texnologiyalar
 
-**Eslatma:** ROI kalkulyatordagi natijalar namuna hisoblash modeliga asoslanadi, kafolatlangan natija emas. Aloqa formasi Telegram'ni ochadi; saytda server yoki murojaatlarni saqlovchi ma'lumotlar bazasi mavjud emas.
+Oddiy HTML, JavaScript, CSS va CDN orqali yuklanadigan Tailwind CSS, Three.js, Font Awesome hamda Google Fonts. Server, npm yoki backend kerak emas. Dizayn to‘liq ko‘rinishi uchun internet kerak.
+
+Aloqa formasi Telegram'ni ochadi; serverda ma'lumotlarni saqlamaydi. ROI kalkulyatori taxminiy natijalarni beradi, kafolatlangan sotuv natijasi emas.
